@@ -57,11 +57,6 @@ then
      exit 1
 fi
 
-
-# environment variables
-AWS_CREDENTIAL_FILE=~/.aws/aws_credential_file
-export AWS_CREDENTIAL_FILE
-
 # let's put  date in a variable
 TODAY=`/bin/date +\%Y-\%m-\%d`
 YESTERDAY=`/bin/date -d "1 day ago" +\%Y-\%m-\%d`
