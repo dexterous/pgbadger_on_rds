@@ -23,32 +23,31 @@ EOF
 
 AWS_INSTANCE=
 AWS_REGION=
-VERBOSE=
 IS_CRON=0
-while getopts “hi:r:c::v” OPTION
-do
-     case $OPTION in
-         h)
-             usage
-             exit 1
-             ;;
-         i)
-             AWS_INSTANCE=$OPTARG
-             ;;
-         r)
-             AWS_REGION=$OPTARG
-             ;;
-         c)
-             IS_CRON=$OPTARG
-             ;;
-         v)
-             VERBOSE=1
-             ;;
-         ?)
-             usage
-             exit
-             ;;
-     esac
+
+while getopts "hi:r:c::v" OPTION; do
+  case $OPTION in
+  h)
+    usage
+    exit 1
+    ;;
+  i)
+    AWS_INSTANCE=$OPTARG
+    ;;
+  r)
+    AWS_REGION=$OPTARG
+    ;;
+  c)
+    IS_CRON=$OPTARG
+    ;;
+  v)
+    set -o xtrace
+    ;;
+  ?)
+    usage
+    exit
+    ;;
+  esac
 done
 
 if [[ -z $AWS_INSTANCE ]] || [[ -z $AWS_REGION ]] 
