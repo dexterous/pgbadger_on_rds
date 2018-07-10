@@ -67,28 +67,25 @@ mkdir -p $PGBADGER_HOME/$AWS_INSTANCE
 
 
 download_and_run_fun() {
+  # remove file, if exists
+  rm -f "$PGBADGER_HOME/$AWS_INSTANCE/postgresql.log.$1"
 
-#remove file, if exists
-rm -f $PGBADGER_HOME/$AWS_INSTANCE/postgresql.log.$1
+  # describe and downlowd log files for yesterday
+  for filename  in $( aws rds describe-db-log-files --db-instance-identifier "$AWS_INSTANCE" --region "$AWS_REGION" --output text --query 'DescribeDBLogFiles[*].LogFileName')
+  do
+    echo "$filename"
+    if [[ $filename == *$1* ]]; then
+      aws rds download-db-log-file-portion --db-instance-identifier "$AWS_INSTANCE" --region "$AWS_REGION" --log-file-name "$filename" >>"$PGBADGER_HOME/$AWS_INSTANCE/postgresql.log.$1"
+    fi
+  done
 
- #describe and downlowd log files for yesterday
-for filename  in $( aws rds describe-db-log-files $AWS_INSTANCE --region $AWS_REGION |awk {'print $2'}|grep $1)
-do
+  # run pgbadger report
+  pgbadger -p '%t:%r:%u@%d:[%p]:' "$PGBADGER_HOME/$AWS_INSTANCE/postgresql.log.$1" -o "$PGBADGER_HOME/$AWS_INSTANCE/postgresql.log.$1.html"
 
- echo $filename
- aws rds download-db-log-files $AWS_INSTANCE --region $AWS_REGION --log-file-name $filename >> $PGBADGER_HOME/$AWS_INSTANCE/postgresql.log.$1
-done
-
-# run pgbadger report
-
-/usr/local/bin/pgbadger -p '%t:%r:%u@%d:[%p]:' $PGBADGER_HOME/$AWS_INSTANCE/postgresql.log.$1  -o $PGBADGER_HOME/$AWS_INSTANCE/postgresql.log.$1.html
-
-# remove log file
-
-rm $PGBADGER_HOME/$AWS_INSTANCE/postgresql.log.$1
+  # remove log file
+  rm "$PGBADGER_HOME/$AWS_INSTANCE/postgresql.log.$1" || /bin/true
  
- return 0
-
+  return 0
 } 
 
 
@@ -96,7 +93,7 @@ rm $PGBADGER_HOME/$AWS_INSTANCE/postgresql.log.$1
 
 if [ $IS_CRON -eq 0 ]
 then
- download_and_run_fun $TODAY
+  download_and_run_fun $TODAY
 else
-download_and_run_fun $YESTERDAY
+  download_and_run_fun $YESTERDAY
 fi
