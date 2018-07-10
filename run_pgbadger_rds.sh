@@ -1,5 +1,9 @@
 #!/bin/bash
-. ~/.bash_profile
+
+# set -o xtrace
+
+
+#. ~/.bash_profile
 # script to generate pgbadger reports
 #Arguments = -i aws-instance-name -r aws-region-name  -c cron_or_not -v
 usage()
