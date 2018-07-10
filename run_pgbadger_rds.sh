@@ -6,8 +6,7 @@
 #. ~/.bash_profile
 # script to generate pgbadger reports
 #Arguments = -i aws-instance-name -r aws-region-name  -c cron_or_not -v
-usage()
-{
+usage() {
 cat << EOF
 usage: $0 options
 
@@ -17,6 +16,7 @@ OPTIONS:
    -h      Show this message
    -i      DBInstanceIdentifier 
    -r      AWS Region 
+   -c      Running as cron job?
    -v      Verbose
 EOF
 }
