@@ -57,13 +57,13 @@ then
 fi
 
 # let's put  date in a variable
-TODAY=`/bin/date +\%Y-\%m-\%d`
-YESTERDAY=`/bin/date -d "1 day ago" +\%Y-\%m-\%d`
+TODAY=$(/bin/date '+%Y-%m-%d')
+YESTERDAY=$(/bin/date -d '1 day ago' '+%Y-%m-%d')
 
 # pgbadger home
 PGBADGER_HOME=/var/www/html/pgbadger_reports/
-mkdir -p $PGBADGER_HOME
-mkdir -p $PGBADGER_HOME/$AWS_INSTANCE 
+mkdir -p "$PGBADGER_HOME"
+mkdir -p "$PGBADGER_HOME/$AWS_INSTANCE" 
 
 
 download_and_run_fun() {
@@ -91,9 +91,9 @@ download_and_run_fun() {
 
 # Download log files and run pgbadger report
 
-if [ $IS_CRON -eq 0 ]
+if [ "$IS_CRON" -eq 0 ]
 then
-  download_and_run_fun $TODAY
+  download_and_run_fun "$TODAY"
 else
-  download_and_run_fun $YESTERDAY
+  download_and_run_fun "$YESTERDAY"
 fi
