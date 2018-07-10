@@ -61,7 +61,7 @@ TODAY=$(/bin/date '+%Y-%m-%d')
 YESTERDAY=$(/bin/date -d '1 day ago' '+%Y-%m-%d')
 
 # pgbadger home
-PGBADGER_HOME=/var/www/html/pgbadger_reports/
+PGBADGER_HOME='./pgbadger_reports/'
 mkdir -p "$PGBADGER_HOME"
 mkdir -p "$PGBADGER_HOME/$AWS_INSTANCE" 
 
